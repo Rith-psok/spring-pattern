@@ -3,7 +3,8 @@ package com.herman.herman.controller;
 import com.herman.herman.constant.ServiceEnum;
 import com.herman.herman.dto.UserDto;
 import com.herman.herman.dto.UserRequest;
-import com.herman.herman.service.factory.UserServiceFactory;
+import com.herman.herman.service.factory.ServiceFactory;
+import com.herman.herman.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
-  private final UserServiceFactory userServiceFactory;
+  private final ServiceFactory<IUserService> serviceFactory;
 
   @PostMapping
   @Tag(name = "Save user in redis")
   public ResponseEntity<UserDto> save(@RequestBody UserRequest request) {
     log.info("Create a user");
-    final var userService = userServiceFactory.createUserService(ServiceEnum.USER_SERVICE);
+    final var userService = serviceFactory.selectService(ServiceEnum.USER_SERVICE);
     return new ResponseEntity<>(userService.save(request), HttpStatus.CREATED);
   }
 }

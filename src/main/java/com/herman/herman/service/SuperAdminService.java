@@ -11,7 +11,7 @@ import java.util.List;
 public class SuperAdminService implements IUserService {
   @Override
   public UserDto save(UserRequest request) {
-    return null;
+    return new UserDto();
   }
 
   @Override

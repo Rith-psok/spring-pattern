@@ -1,7 +1,9 @@
 package com.herman.herman.controller;
 
+import com.herman.herman.constant.ServiceEnum;
 import com.herman.herman.dto.UserDto;
 import com.herman.herman.dto.UserRequest;
+import com.herman.herman.service.factory.ServiceFactory;
 import com.herman.herman.service.interfaces.IUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/super-admin")
 @RequiredArgsConstructor
 public class SuperAdminController {
-  private final IUserService userService;
+  private final ServiceFactory<IUserService> serviceFactory;
 
   @PostMapping
-  @Tag(name = "Save user in redis")
+  @Tag(name = "Save user")
   public ResponseEntity<UserDto> save(@RequestBody UserRequest request) {
-    return new ResponseEntity<>(this.userService.save(request), HttpStatus.CREATED);
+    final var superAdminService = serviceFactory.selectService(ServiceEnum.SUPER_ADMIN_SERVICE);
+    return new ResponseEntity<>(superAdminService.save(request), HttpStatus.CREATED);
   }
 }
